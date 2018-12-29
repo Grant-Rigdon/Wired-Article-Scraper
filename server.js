@@ -58,19 +58,19 @@ app.get('/', (req,res) => {
     db.Article
       .find({})
       .then(articles => res.render('index', {articles, active: { home: true }}))
-      .catch(err=> res.json(err));
+      .catch(err=> res.json(err))
 });
 
 app.get("/saved", (req,res) => {
     db.Article
       .find({})
       .then(articles => res.render('saved', {articles, active: { saved: true }}))
-      .catch(err=> res.json(err));
+      .catch(err=> res.json(err))
 });
 
 app.get("/scrape",function(req,res) {
     axios.get("https://www.wired.com").then(function(response){
-    var $ = cheerio.load(response.data);
+    var $ = cheerio.load(response.data)
 
        
 
@@ -96,10 +96,10 @@ app.delete("/clear", (req,res) => {
         .deleteMany({})
         .exec((err, doc) => {
             if (err) {
-              console.log(err);
+              console.log(err)
             }
             else {
-              res.send(doc);
+              res.send(doc)
             }
         })
 })
@@ -109,10 +109,10 @@ app.post("/save/:id", (req,res) => {
         .update({ "_id": req.params.id }, { "saved": true})
         .exec((err, doc) => {
             if (err) {
-              console.log(err);
+              console.log(err)
             }
             else {
-              res.send(doc);
+              res.send(doc)
             }
         })
         
@@ -123,13 +123,43 @@ app.post("/delete/:id", (req,res) => {
         .update({ "_id": req.params.id }, { "saved": false})
         .exec((err, doc) => {
             if (err) {
-              console.log(err);
+              console.log(err)
             }
             else {
-              res.send(doc);
+              res.send(doc)
             }
         })
         
+})
+
+app.post("/note/:id", (req,res) => {
+    db.Note
+        .create(req.body)
+        .then((dbNote) => {
+            console.log(dbNote)
+            return db.Article.findOneAndUpdate({ _id: req.params.id }, {$push: {note: dbNote._id }}, { new: true })            
+        })
+        .then((dbArticle) => {            
+            // If we were able to successfully update an Article, send it back to the client
+            res.json(dbArticle)
+          })
+          .catch((err) => {
+            // If an error occurred, send it to the client
+            res.json(err)
+          });
+})
+
+app.delete("/note-delete/:id", (req,res) => {
+    db.Note
+        .deleteOne({"_id": `ObjectId("${req.params.id}")`})
+        .exec((err, doc) => {
+            if (err) {
+              console.log(err)
+            }
+            else {
+              res.send(doc)
+            }
+        })
 })
 
 
