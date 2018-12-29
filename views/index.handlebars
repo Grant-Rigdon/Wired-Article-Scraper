@@ -1,0 +1,23 @@
+
+<div class="container-fluid article-container">
+    {{#if articles}}
+        {{#each articles}}
+            <div class="card border-info mb-3" >
+                <div class="card-header"></div>
+                <div class="card-body text-info">
+                    <h2 class="card-title"><a href="{{this.link}}">{{this.title}}</a></h2>
+                    
+                        <p class="card-text">{{this.author}}</p>
+                        <button class="btn btn-info float-right " post-id="{{this.id}}" id="save">Save Ariticle</button>
+                    
+                </div>
+            </div>
+        {{/each}}
+    {{else}}
+        <div class="alert bg-warning text-center">
+            <h4>Uh Oh. Looks like we don't have any new articles.</h4>
+        </div>
+    {{/if}}
+    
+    
+</div>

@@ -1,0 +1,20 @@
+<div class="container-fluid article-container">
+    
+    {{#each articles}}
+        {{#if this.saved}}
+            <div class="card border-info mb-3" >
+                <div class="card-header"></div>
+                <div class="card-body text-info">
+                    <h2 class="card-title"><a href="{{this.link}}">{{this.title}}</a></h2>                    
+                        <p class="card-text">{{this.author}}</p>
+                        <p class="card-text">{{this.note}}</p>
+                        <button class="btn btn-info float-right " post-id="{{this.id}}" id="delete">Delete Ariticle</button>
+                        <button class="btn btn-info float-right " post-id="{{this.id}}" id="delete">Make a Note</button>                    
+                </div>
+            </div>
+
+        {{/if}}
+    {{/each}}
+       
+    
+</div>
