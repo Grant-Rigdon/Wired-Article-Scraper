@@ -64,6 +64,7 @@ app.get('/', (req,res) => {
 app.get("/saved", (req,res) => {
     db.Article
       .find({})
+      .populate("note")
       .then(articles => res.render('saved', {articles, active: { saved: true }}))
       .catch(err=> res.json(err))
 });
@@ -106,7 +107,7 @@ app.delete("/clear", (req,res) => {
 
 app.post("/save/:id", (req,res) => {
     db.Article
-        .update({ "_id": req.params.id }, { "saved": true})
+        .update({ _id: req.params.id }, { "saved": true})
         .exec((err, doc) => {
             if (err) {
               console.log(err)
@@ -120,7 +121,7 @@ app.post("/save/:id", (req,res) => {
 
 app.post("/delete/:id", (req,res) => {
     db.Article
-        .update({ "_id": req.params.id }, { "saved": false})
+        .update({ _id: req.params.id }, { "saved": false})
         .exec((err, doc) => {
             if (err) {
               console.log(err)
@@ -151,7 +152,7 @@ app.post("/note/:id", (req,res) => {
 
 app.delete("/note-delete/:id", (req,res) => {
     db.Note
-        .deleteOne({"_id": `ObjectId("${req.params.id}")`})
+        .deleteOne({_id: req.params.id})
         .exec((err, doc) => {
             if (err) {
               console.log(err)

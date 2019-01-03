@@ -10,7 +10,7 @@
                         <br>
                         {{#if this.note}}
                             {{#each this.note}}                                
-                                <p class="card-text">{{this}}<button type="button" class="close note-delete" aria-label="Close" note-id="{{this}}"><span aria-hidden="true">&times;</span></button></p> 
+                                <p class="card-text">{{this.body}}<button type="button" class="close note-delete" aria-label="Close" note-id="{{this.id}}"><span aria-hidden="true">&times;</span></button></p> 
                             {{/each}}
                         {{else}}
                             <p>No Notes Yet.</p>

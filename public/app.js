@@ -75,7 +75,7 @@ $(".note-delete").on("click", function(event) {
         method: "DELETE",
         url: "/note-delete/" + thisId
     }).done(function(data) {
-        console.log(data)        
+              
         window.location = "/saved"
     })
 });
