@@ -41,7 +41,13 @@ app.engine("handlebars", exphbs({
 app.set("view engine", "handlebars");
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/mongoScraper", { useNewUrlParser: true });
+var databaseUri = "mongodb://localhost/mongoScraper"
+
+if (process.env.MONGODB_URI) {
+    mongoose.connect(process.env.MONGODB_URI)
+}else{
+    mongoose.connect(databaseUri)
+}
 
 // Show any mongoose errors
 mongoose.connection.on("error", function(error) {
