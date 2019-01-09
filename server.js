@@ -1,25 +1,25 @@
-var express = require("express");
-var logger = require("morgan");
-var mongoose = require("mongoose");
-var path = require("path");
+const express = require("express");
+const logger = require("morgan");
+const mongoose = require("mongoose");
+const path = require("path");
 
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
 // It works on the client and on the server
-var axios = require("axios");
-var cheerio = require("cheerio");
+const axios = require("axios");
+const cheerio = require("cheerio");
 
 // Require all models
-var db = require("./models");
+const db = require("./models");
 
 // Set mongoose to leverage built in JavaScript ES6 Promises
 mongoose.Promise = Promise;
 
 
-var PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 // Initialize Express
-var app = express();
+const app = express();
 
 // Configure middleware
 
@@ -32,7 +32,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Set Handlebars.
-var exphbs = require("express-handlebars");
+const exphbs = require("express-handlebars");
 
 app.engine("handlebars", exphbs({
     defaultLayout: "main",
@@ -41,7 +41,7 @@ app.engine("handlebars", exphbs({
 app.set("view engine", "handlebars");
 
 // Connect to the Mongo DB
-var databaseUri = "mongodb://localhost/mongoScraper"
+const databaseUri = "mongodb://localhost/mongoScraper"
 
 if (process.env.MONGODB_URI) {
     mongoose.connect(process.env.MONGODB_URI)
@@ -50,12 +50,12 @@ if (process.env.MONGODB_URI) {
 }
 
 // Show any mongoose errors
-mongoose.connection.on("error", function(error) {
+mongoose.connection.on("error", (error) => {
     console.log("Mongoose Error: ", error);
 });
 
 // Once logged in to the db through mongoose, log a success message
-mongoose.connection.once("open", function() {
+mongoose.connection.once("open", () => {
     console.log("Mongoose connection successful.");
 });
 
@@ -75,17 +75,17 @@ app.get("/saved", (req,res) => {
       .catch(err=> res.json(err))
 });
 
-app.get("/scrape",function(req,res) {
-    axios.get("https://www.wired.com").then(function(response){
-    var $ = cheerio.load(response.data)
+app.get("/scrape",(req,res)=> {
+    axios.get("https://www.wired.com").then((response) => {
+    const $ = cheerio.load(response.data)
 
        
 
-    $("li.post-listing-list-item__post").each(function(i, element) {
+    $("li.post-listing-list-item__post").each((i, element) => {
 
-        var title = $(element).find("h5.post-listing-list-item__title").text()
-        var link = $(element).find("a").attr("href")
-        var author = $(element).find("span.byline-component__content").text()
+        const title = $(element).find("h5.post-listing-list-item__title").text()
+        const link = $(element).find("a").attr("href")
+        const author = $(element).find("span.byline-component__content").text()
         
         db.Article.create({
         title: title,
@@ -173,6 +173,6 @@ app.delete("/note-delete/:id", (req,res) => {
 
 
 // Listen on port
-app.listen(PORT, function() {
+app.listen(PORT, () => {
     console.log("App running on port " + PORT);
   });
