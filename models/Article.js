@@ -20,6 +20,13 @@ var ArticleSchema = new Schema({
   author: {
     type: String
   },
+  beerId: {
+    type: String,
+    unique: true
+  },
+  description: {
+    type: String
+  },
   // `saved` is of type Boolean
   saved: {
     type: Boolean,

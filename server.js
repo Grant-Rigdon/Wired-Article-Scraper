@@ -2,6 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const path = require("path");
+const Promise = require("bluebird");
 
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
@@ -76,26 +77,37 @@ app.get("/saved", (req,res) => {
 });
 
 app.get("/scrape",(req,res)=> {
-    axios.get("https://www.wired.com").then((response) => {
-    const $ = cheerio.load(response.data)
+  axios.get("https://untappd.com/beer/top_rated").then((response) => {
+  const $ = cheerio.load(response.data)
+  
+  let options = $("#filter_picker").find("option[data-value-slug]").map(function(){return $(this).attr("data-value-slug");}).get();  
+  return Promise.mapSeries(options, option => {      
+      axios.get(`https://untappd.com/beer/top_rated?type=${option}`).then((response) => {
+        const $ = cheerio.load(response.data)
+    
+        $("div.beer-details").each((i, element) => {
 
-       
-
-    $("li.post-listing-list-item__post").each((i, element) => {
-
-        const title = $(element).find("h5.post-listing-list-item__title").text()
-        const link = $(element).find("a").attr("href")
-        const author = $(element).find("span.byline-component__content").text()
-        
-        db.Article.create({
-        title: title,
-        link: link,
-        author: author
+            const title = $(element).find("p.name").text()
+            const link = $(element).find("a").attr("href")
+            const author = $(element).find("p.style").eq(1).text()
+            const beerId = link.split('/').pop()
+            const description = $(element).find("p.desc").last().text()
+            
+            db.Article.create({
+            beerId,
+            title,
+            link,
+            author,
+            description
+            })
         })
-    })
-    })
-    .then(articles => res.render('index', {articles, active: { home: true }}))
-
+      })
+  })
+  })
+  .then(articles => res.render('index', {articles, active: { home: true }}))
+  .catch(err => {
+    console.log(err)
+  })
 })
 
 app.delete("/clear", (req,res) => {

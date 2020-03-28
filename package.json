@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Grant-Rigdon/Wired-Article-Scraper#readme",
   "dependencies": {
     "axios": "^0.18.0",
+    "bluebird": "^3.7.2",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.4",
     "express-handlebars": "^3.0.0",

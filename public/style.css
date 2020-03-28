@@ -8,10 +8,11 @@ body {
 }
 
 .jumbotron {
-    background-image: url("https://www.topuniversities.com/sites/default/files/articles/lead-images/mit_vs_caltech.jpg");
+    background-image: url("https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/701/articles/2017/06/beer-brain-1498165436.gif");
     font-family: 'Share Tech Mono', monospace;    
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     -webkit-text-stroke: 1px black;
     color: white;
